@@ -30,7 +30,7 @@
         <input id="html-submit" type="submit" value="Submit" />
 
         <!-- note dont make ajax button type submit -->
-        <input id="ajax-submit" type="button" value="Ajax Submit" />
+        <!--<input id="ajax-submit" type="button" value="Ajax Submit" />-->
       </form>
     </div>
 
@@ -46,7 +46,7 @@
 
       var result_div = document.getElementById("result");
       var volume = document.getElementById("volume");
-      let button = document.getElementById("ajax-submit");
+      let button = document.getElementById("html-submit");
       let origButtonValue = button.value;
 
       function showSpinner() {
@@ -157,7 +157,12 @@
         xhr.send(form_data);
       }
 
-      button.addEventListener("click", calculateMeasurements);
+      //button.addEventListener("click", calculateMeasurements);
+      // this allows us to use our ajax and html requests with one button (using preventDefault())
+      button.addEventListener("click", function(event) {
+        event.preventDefault();
+        calculateMeasurements();
+      });
 
     </script>
 
