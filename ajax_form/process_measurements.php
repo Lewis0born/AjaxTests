@@ -1,6 +1,6 @@
 <?php
   // You can simulate a slow server with sleep
-  // sleep(2);
+  sleep(2);
 
   function is_ajax_request() {
     return isset($_SERVER['HTTP_X_REQUESTED_WITH']) &&
@@ -17,10 +17,16 @@
   if(empty($height)){ $errors[] = 'height'; }
 
   if(!empty($errors)){
-    // wont work with single quotes
-    // echo "{ 'errors': " . json_encode($errors) ."}";
-    $result_array = array('errors' => $errors);
-    echo json_encode($result_array);
+    if(is_ajax_request()){
+      // wont work with single quotes
+      // echo "{ 'errors': " . json_encode($errors) ."}";
+      $result_array = array('errors' => $errors);
+      echo json_encode($result_array);
+      exit;
+    } else {
+      echo "<p>There were errors on: " . implode(', ', $errors) . "</p>";
+      echo "<p><a href=\"index.php\">Back</a></p>";
+    }
     exit;
   }
 
@@ -29,7 +35,8 @@
   if(is_ajax_request()) {
     echo json_encode(array('volume' => $volume));
   } else {
-    exit;
+    echo "<p>The total volume is: " . $volume . "</p>";
+    echo "<p><a href=\"index.php\">Back</a></p>";
   }
 
 ?>
