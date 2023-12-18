@@ -33,6 +33,7 @@
 
       var container = document.getElementById('blog-posts');
       var load_more = document.getElementById('load-more');
+      let request_in_progress = false;
 
       function showSpinner() {
         var spinner = document.getElementById("spinner");
@@ -74,7 +75,22 @@
         load_more.setAttribute('data-page', page);
       }
 
+      // INFINITE  SCROLLING !!
+      function scrollReaction() {
+        let content_height = container.offsetHeight;
+        let current_y = window.innerHeight + window.pageYOffset;
+        console.log(current_y + '/' + content_height);
+        if(current_y >= content_height){
+          loadMore();
+        }
+      }
+
       function loadMore() {
+
+        if(request_in_progress){
+          return;
+        }
+        request_in_progress = true;
 
         showSpinner();
         hideLoadMore();
@@ -95,6 +111,7 @@
             // append results to end of blog posts
             appendToDiv(container,result);
             showLoadMore();
+            request_in_progress = false;
 
           }
         };
@@ -103,7 +120,9 @@
 
       load_more.addEventListener("click", loadMore);
 
-      
+      window.onscroll = function() {
+        scrollReaction();
+      }
 
       // Load even the first page with Ajax
       loadMore();
